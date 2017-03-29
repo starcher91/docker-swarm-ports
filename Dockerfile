@@ -1,8 +1,14 @@
 FROM python:2
 
-RUN apt-get update && apt-get install docker && apt-get clean
+COPY system-requirements.txt /system-requirements.txt
 
-RUN pip install docker
+RUN apt-get update && \
+    xargs apt-get -y -q install < /system-requirements.txt && \
+    apt-get clean
+
+COPY requirements.txt /requirements.txt
+
+RUN pip install -r /requirements.txt
 
 COPY main.py /main.py
 
