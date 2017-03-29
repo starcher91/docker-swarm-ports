@@ -6,7 +6,8 @@ print template.format("SERVICE", "IMAGE", "PUBLISHEDPORT")
 
 for service in client.services.list():
     ports = []
-    for portsObject in service.attrs["Endpoint"]["Ports"]:
-        ports.append(portsObject["PublishedPort"])
-    shortImageName = service.attrs["Spec"]["TaskTemplate"]["ContainerSpec"]["Image"].split("@sha256")[0]
+    if service.attrs.get("Endpoint").get("Ports") is not None:
+        for portsObject in service.attrs.get("Endpoint").get("Ports"):
+            ports.append(portsObject.get("PublishedPort"))
+    shortImageName = service.attrs.get("Spec").get("TaskTemplate").get("ContainerSpec").get("Image").split("@sha256")[0]
     print template.format(service.name, shortImageName, ", ".join(map(str, ports)))
