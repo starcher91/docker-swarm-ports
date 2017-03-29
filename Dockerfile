@@ -1,10 +1,4 @@
-FROM python:2
-
-COPY system-requirements.txt /system-requirements.txt
-
-RUN apt-get update && \
-    xargs apt-get -y -q install < /system-requirements.txt && \
-    apt-get clean
+FROM python:2-alpine
 
 COPY requirements.txt /requirements.txt
 
