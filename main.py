@@ -8,4 +8,5 @@ for service in client.services.list():
     ports = []
     for portsObject in service.attrs["Endpoint"]["Ports"]:
         ports.append(portsObject["PublishedPort"])
-    print template.format(service.name, service.attrs["Spec"]["TaskTemplate"]["ContainerSpec"]["Image"], ", ".join(map(str, ports)))
+    shortImageName = service.attrs["Spec"]["TaskTemplate"]["ContainerSpec"]["Image"].split("@sha256")[0]
+    print template.format(service.name, shortImageName, ", ".join(map(str, ports)))
