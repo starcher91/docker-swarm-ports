@@ -1,0 +1,14 @@
+FROM python:2-alpine
+
+COPY cli/requirements.txt /requirements.txt
+
+RUN pip install -r /requirements.txt
+
+RUN mkdir -p /usr/local/app/cli && mkdir -p /usr/local/app/utils
+
+COPY cli/ /usr/local/app/cli/
+COPY utils/ /usr/local/app/utils/
+WORKDIR /usr/local/app/cli
+
+ENTRYPOINT ["python"]
+CMD ["/usr/local/app/cli/cli.py"] 
