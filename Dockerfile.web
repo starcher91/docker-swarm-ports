@@ -1,0 +1,15 @@
+FROM python:2-alpine
+
+COPY web/requirements.txt /requirements.txt
+
+RUN pip install -r /requirements.txt
+
+RUN mkdir -p /usr/local/app/web && mkdir -p /usr/local/app/utils
+
+COPY web/ /usr/local/app/web/
+COPY utils/ /usr/local/app/utils/
+WORKDIR /usr/local/app/web
+
+
+ENTRYPOINT ["python"]
+CMD ["/usr/local/app/web/web.py"] 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+    <title>Docker Swarm Service Ports</title>
+    <link rel="stylesheet" href="http://bootswatch.com/slate/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Service Name</th>
+                            <th>Image Name</th>
+                            <th>Exposed Ports</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                            <tr class="row-template">
+                                <th scope="row">{{ loop.index }}</th>
+                                <td>{{ service.serviceName }}</td>
+                                <td>{{ service.imageName }}</td>
+                                <td>{{ service.ports }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        setInterval(function() {
+            fetch('/services').then(function(response) {
+                response.json().then(function(data) {
+                    //get templates and parent
+                    var tbody = document.querySelector("tbody");
+                    var template = document.querySelector(".row-template");
+                    var newNodes = [];
+
+                    //create a new node with updated data for each service
+                    data.forEach(function(service, index) {
+                        var newServiceNode = template.cloneNode(true);
+                        newServiceNode.children[0].innerText = index + 1;
+                        newServiceNode.children[1].innerText = service.serviceName;
+                        newServiceNode.children[2].innerText = service.imageName;
+                        newServiceNode.children[3].innerText = service.ports;
+                        newNodes.push(newServiceNode);
+                    });
+
+                    //remove all service nodes
+                    while(tbody.firstChild) {
+                        tbody.removeChild(tbody.firstChild);
+                    }
+
+                    //add back nodes
+                    newNodes.forEach(function(node) {
+                        tbody.appendChild(node);
+                    });
+                });
+            });
+        }, 5000);
+    </script>
+</body>
