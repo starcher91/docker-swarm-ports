@@ -7,59 +7,39 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Service Name</th>
-                            <th>Image Name</th>
-                            <th>Exposed Ports</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for service in services %}
-                            <tr class="row-template">
-                                <th scope="row">{{ loop.index }}</th>
-                                <td>{{ service.serviceName }}</td>
-                                <td>{{ service.imageName }}</td>
-                                <td>{{ service.ports }}</td>
+                <div class="input-group">
+                    <input id="server" class="form-control" type="text" placeholder="Server Host Name including Port"/>
+                    <span class="input-group-btn">
+                        <button id="server-add-button" class="btn btn-primary">Add</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="contentParent" class="col-12">
+                <div class="tableParent">
+                    <h3 class="table-header"></h3>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Service Name</th>
+                                <th>Image Name</th>
+                                <th>Exposed Ports</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <tr class="row-template">
+                                <th class="index" scope="row"></th>
+                                <td class="service-name"></td>
+                                <td class="image-name"></td>
+                                <td class="ports"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        setInterval(function() {
-            fetch('/services').then(function(response) {
-                response.json().then(function(data) {
-                    //get templates and parent
-                    var tbody = document.querySelector("tbody");
-                    var template = document.querySelector(".row-template");
-                    var newNodes = [];
-
-                    //create a new node with updated data for each service
-                    data.forEach(function(service, index) {
-                        var newServiceNode = template.cloneNode(true);
-                        newServiceNode.children[0].innerText = index + 1;
-                        newServiceNode.children[1].innerText = service.serviceName;
-                        newServiceNode.children[2].innerText = service.imageName;
-                        newServiceNode.children[3].innerText = service.ports;
-                        newNodes.push(newServiceNode);
-                    });
-
-                    //remove all service nodes
-                    while(tbody.firstChild) {
-                        tbody.removeChild(tbody.firstChild);
-                    }
-
-                    //add back nodes
-                    newNodes.forEach(function(node) {
-                        tbody.appendChild(node);
-                    });
-                });
-            });
-        }, 5000);
-    </script>
+    <script src="/static/app.js"></script>
 </body>
