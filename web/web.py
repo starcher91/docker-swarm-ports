@@ -5,6 +5,7 @@ import service_ports
 from flask import Flask
 from flask import render_template
 from flask import jsonify
+from flask import make_response
 
 app = Flask(__name__)
 
@@ -15,6 +16,8 @@ def home():
 
 @app.route('/services')
 def services():
-    return jsonify(service_ports.services())
+    resp = make_response(jsonify(service_ports.services()))
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
 
 app.run(debug=True, host="0.0.0.0")
